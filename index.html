@@ -3,7 +3,7 @@
 <head>
 
 <meta charset="utf-8" />
-<title>index</title>
+<title>My digital infatuation</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
@@ -1680,6 +1680,10 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<div id="nav">
+<a href="http://wrh2.github.io/archive/">Past posts</a><br>
+<a href="http://wrh2.github.io/resume/wrh2res.pdf">My resume</a><br>
+</div>
 <h1 id="my-digital-infatuation">My Digital Infatuation</h1>
 <p>by William Harrington</p>
 <p>May 23, 2016</p>
@@ -1697,42 +1701,40 @@ In&nbsp;[1]:
 </div>
 <div class="inner_cell">
     <div class="input_area">
-<div class="highlight"><pre><span class="sd">&quot;&quot;&quot;                                                                                                                                                                                  </span>
-<span class="sd">        4-bit Fibonaccio Linear Feedback Shift Register                                                                                                                              </span>
-<span class="sd">        programmed using MyHDL library                                                                                                                                               </span>
-<span class="sd">                                                                                                                                                                                     </span>
-<span class="sd">        Programmed by William Harrington                                                                                                                                             </span>
-<span class="sd">        Website: wrh2.github.io                                                                                                                                                      </span>
+<div class="highlight"><pre><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    4-bit Fibonaccio Linear Feedback Shift Register</span>
+<span class="sd">    programmed using MyHDL library</span>
+<span class="sd">        </span>
+<span class="sd">    Programmed by William Harrington</span>
+<span class="sd">    Website: wrh2.github.io</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">myhdl</span> <span class="kn">import</span> <span class="o">*</span>
 
 <span class="k">def</span> <span class="nf">xor</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;                                                                                                                                                                          </span>
-<span class="sd">        XOR function                                                                                                                                                                 </span>
-<span class="sd">                                                                                                                                                                                     </span>
-<span class="sd">        :param input a: first operand                                                                                                                                                </span>
-<span class="sd">        :param input b: second operand                                                                                                                                               </span>
-<span class="sd">        :param output y: a XOR b                                                                                                                                                     </span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nd">@always_comb</span>
-        <span class="k">def</span> <span class="nf">logic</span><span class="p">():</span>
-                <span class="n">y</span><span class="o">.</span><span class="n">next</span> <span class="o">=</span> <span class="n">a</span> <span class="o">^</span> <span class="n">b</span>
-        <span class="k">return</span> <span class="n">logic</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    XOR function</span>
+<span class="sd">        </span>
+<span class="sd">    :param input a: first operand</span>
+<span class="sd">    :param input b: second operand</span>
+<span class="sd">    :param output y: a XOR b                                                                                                                                                     </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nd">@always_comb</span>
+    <span class="k">def</span> <span class="nf">logic</span><span class="p">():</span>
+        <span class="n">y</span><span class="o">.</span><span class="n">next</span> <span class="o">=</span> <span class="n">a</span> <span class="o">^</span> <span class="n">b</span>
+    <span class="k">return</span> <span class="n">logic</span>
 
 <span class="k">def</span> <span class="nf">dff</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">clk</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;                                                                                                                                                                              </span>
-<span class="sd">    D-Flip Flop Module                                                                                                                                                               </span>
-<span class="sd">                                                                                                                                                                                     </span>
-<span class="sd">    :param input d: input to flip flop                                                                                                                                               </span>
-<span class="sd">    :param input clk: clock signal                                                                                                                                                   </span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    D-Flip Flop Module</span>
+<span class="sd">    </span>
+<span class="sd">    :param input d: input to flip flop</span>
+<span class="sd">    :param input clk: clock signal</span>
 <span class="sd">    :param output q: output of flip flop                                                                                                                                             </span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
     <span class="nd">@always</span><span class="p">(</span><span class="n">clk</span><span class="o">.</span><span class="n">posedge</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">logic</span><span class="p">():</span>
-        <span class="c"># changes to d on the rising edge                                                                                                                                            </span>
+        <span class="c"># changes to d on the rising edge</span>
         <span class="n">q</span><span class="o">.</span><span class="n">next</span> <span class="o">=</span> <span class="n">d</span>
-
     <span class="k">return</span> <span class="n">logic</span>
 
 <span class="k">def</span> <span class="nf">LFSR</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">clk</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mh">0xF</span><span class="p">):</span>
