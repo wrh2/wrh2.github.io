@@ -1704,7 +1704,7 @@ In&nbsp;[1]:
 <div class="highlight"><pre><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    4-bit Fibonaccio Linear Feedback Shift Register</span>
 <span class="sd">    programmed using MyHDL library</span>
-<span class="sd">        </span>
+<span class="sd">    </span>
 <span class="sd">    Programmed by William Harrington</span>
 <span class="sd">    Website: wrh2.github.io</span>
 <span class="sd">&quot;&quot;&quot;</span>
@@ -1713,10 +1713,10 @@ In&nbsp;[1]:
 <span class="k">def</span> <span class="nf">xor</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    XOR function</span>
-<span class="sd">        </span>
+<span class="sd">    </span>
 <span class="sd">    :param input a: first operand</span>
 <span class="sd">    :param input b: second operand</span>
-<span class="sd">    :param output y: a XOR b                                                                                                                                                     </span>
+<span class="sd">    :param output y: a XOR b</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="nd">@always_comb</span>
     <span class="k">def</span> <span class="nf">logic</span><span class="p">():</span>
@@ -1729,7 +1729,7 @@ In&nbsp;[1]:
 <span class="sd">    </span>
 <span class="sd">    :param input d: input to flip flop</span>
 <span class="sd">    :param input clk: clock signal</span>
-<span class="sd">    :param output q: output of flip flop                                                                                                                                             </span>
+<span class="sd">    :param output q: output of flip flop</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="nd">@always</span><span class="p">(</span><span class="n">clk</span><span class="o">.</span><span class="n">posedge</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">logic</span><span class="p">():</span>
@@ -1737,74 +1737,71 @@ In&nbsp;[1]:
         <span class="n">q</span><span class="o">.</span><span class="n">next</span> <span class="o">=</span> <span class="n">d</span>
     <span class="k">return</span> <span class="n">logic</span>
 
-<span class="k">def</span> <span class="nf">LFSR</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">clk</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mh">0xF</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;                                                                                                                                                                          </span>
-<span class="sd">        4-bit Linear Feedback Shift Register                                                                                                                                         </span>
-<span class="sd">                                                                                                                                                                                     </span>
-<span class="sd">        :param input clk: clock signal:                                                                                                                                              </span>
-<span class="sd">        :param input seed: starting value, defaults to 0xF                                                                                                                           </span>
+<span class="k">def</span> <span class="nf">LFSR</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">clk</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    4-bit Linear Feedback Shift Register</span>
+<span class="sd">    </span>
+<span class="sd">    :param input clk: clock signal</span>
+<span class="sd">    :param input seed: starting value, defaults to 0xF</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="sd">&quot;&quot;&quot; internal signals declaration &quot;&quot;&quot;</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="nb">bool</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+    <span class="n">q0</span><span class="p">,</span> <span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">,</span> <span class="n">q3</span> <span class="o">=</span> <span class="p">[</span><span class="n">Signal</span><span class="p">(</span><span class="nb">bool</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">)]</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="n">concat</span><span class="p">(</span><span class="n">q0</span><span class="p">,</span> <span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">,</span> <span class="n">q3</span><span class="p">))</span>
+    
+    <span class="sd">&quot;&quot;&quot; module instantiation &quot;&quot;&quot;</span>
+    <span class="n">d0</span> <span class="o">=</span> <span class="n">dff</span><span class="p">(</span><span class="n">q0</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">clk</span><span class="p">)</span>
+    <span class="n">d1</span> <span class="o">=</span> <span class="n">dff</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span> <span class="n">q0</span><span class="p">,</span> <span class="n">clk</span><span class="p">)</span>
+    <span class="n">d2</span> <span class="o">=</span> <span class="n">dff</span><span class="p">(</span><span class="n">q2</span><span class="p">,</span> <span class="n">q1</span><span class="p">,</span> <span class="n">clk</span><span class="p">)</span>
+    <span class="n">d3</span> <span class="o">=</span> <span class="n">dff</span><span class="p">(</span><span class="n">q3</span><span class="p">,</span> <span class="n">q2</span><span class="p">,</span> <span class="n">clk</span><span class="p">)</span>
+    <span class="n">y1</span> <span class="o">=</span> <span class="n">xor</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">q3</span><span class="p">,</span> <span class="n">q2</span><span class="p">)</span>
+    
+    <span class="nd">@always</span><span class="p">(</span><span class="n">count</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">output</span><span class="p">():</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">next</span> <span class="o">=</span> <span class="n">count</span>
+    
+    <span class="nd">@always_comb</span>
+    <span class="k">def</span> <span class="nf">current</span><span class="p">():</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function creates bus from outputs of</span>
+<span class="sd">        the D flip flops for easy viewing in a</span>
+<span class="sd">        waveform viewer</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="sd">&quot;&quot;&quot; internal signals declaration &quot;&quot;&quot;</span>
-        <span class="n">d</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="nb">bool</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
-        <span class="n">q0</span><span class="p">,</span> <span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">,</span> <span class="n">q3</span> <span class="o">=</span> <span class="p">[</span><span class="n">Signal</span><span class="p">(</span><span class="nb">bool</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">)]</span>
-        <span class="n">count</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="n">concat</span><span class="p">(</span><span class="n">q0</span><span class="p">,</span> <span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">,</span> <span class="n">q3</span><span class="p">))</span>
-
-        <span class="sd">&quot;&quot;&quot; module instantiation &quot;&quot;&quot;</span>
-        <span class="n">d0</span> <span class="o">=</span> <span class="n">dff</span><span class="p">(</span><span class="n">q0</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">clk</span><span class="p">)</span>
-        <span class="n">d1</span> <span class="o">=</span> <span class="n">dff</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span> <span class="n">q0</span><span class="p">,</span> <span class="n">clk</span><span class="p">)</span>
-        <span class="n">d2</span> <span class="o">=</span> <span class="n">dff</span><span class="p">(</span><span class="n">q2</span><span class="p">,</span> <span class="n">q1</span><span class="p">,</span> <span class="n">clk</span><span class="p">)</span>
-        <span class="n">d3</span> <span class="o">=</span> <span class="n">dff</span><span class="p">(</span><span class="n">q3</span><span class="p">,</span> <span class="n">q2</span><span class="p">,</span> <span class="n">clk</span><span class="p">)</span>
-        <span class="n">y1</span> <span class="o">=</span> <span class="n">xor</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">q3</span><span class="p">,</span> <span class="n">q2</span><span class="p">)</span>
-
-        <span class="nd">@always</span><span class="p">(</span><span class="n">count</span><span class="p">)</span>
-        <span class="k">def</span> <span class="nf">output</span><span class="p">():</span>
-               <span class="n">out</span><span class="o">.</span><span class="n">next</span> <span class="o">=</span> <span class="n">count</span>
-
-        <span class="nd">@always_comb</span>
-        <span class="k">def</span> <span class="nf">current</span><span class="p">():</span>
-                <span class="sd">&quot;&quot;&quot;                                                                                                                                                                  </span>
-<span class="sd">                This function creates bus from outputs of                                                                                                                            </span>
-<span class="sd">                the D flip flops for easy viewing in a                                                                                                                               </span>
-<span class="sd">                waveform viewer                                                                                                                                                      </span>
-<span class="sd">                &quot;&quot;&quot;</span>
-                <span class="n">count</span><span class="o">.</span><span class="n">next</span> <span class="o">=</span> <span class="n">concat</span><span class="p">(</span><span class="n">q0</span><span class="p">,</span> <span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">,</span> <span class="n">q3</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">instances</span><span class="p">()</span>
+        <span class="n">count</span><span class="o">.</span><span class="n">next</span> <span class="o">=</span> <span class="n">concat</span><span class="p">(</span><span class="n">q0</span><span class="p">,</span> <span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">,</span> <span class="n">q3</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">instances</span><span class="p">()</span>
     
 <span class="k">def</span> <span class="nf">LFSR_testbench</span><span class="p">():</span>
-        <span class="sd">&quot;&quot;&quot;                                                                                                                                                                          </span>
-<span class="sd">        Testbench for linear feedback shift register                                                                                                                                 </span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="c"># create clock signal                                                                                                                                                        </span>
-        <span class="n">clk</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="nb">bool</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
-
-        <span class="n">out</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-
-        <span class="c"># instantiate linear feedback shift register                                                                                                                                 </span>
-        <span class="n">lfsr_inst</span> <span class="o">=</span> <span class="n">LFSR</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">clk</span><span class="p">)</span>
-
-        <span class="sd">&quot;&quot;&quot; clock generator &quot;&quot;&quot;</span>
-        <span class="nd">@always</span><span class="p">(</span><span class="n">delay</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
-        <span class="k">def</span> <span class="nf">clkgen</span><span class="p">():</span>
-                <span class="n">clk</span><span class="o">.</span><span class="n">next</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">clk</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Testbench for linear feedback shift register</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">clk</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="nb">bool</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    
+    <span class="c"># instantiate linear feedback shift register</span>
+    <span class="n">lfsr_inst</span> <span class="o">=</span> <span class="n">LFSR</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">clk</span><span class="p">)</span>
+    
+    <span class="sd">&quot;&quot;&quot; clock generator &quot;&quot;&quot;</span>
+    <span class="nd">@always</span><span class="p">(</span><span class="n">delay</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+    <span class="k">def</span> <span class="nf">clkgen</span><span class="p">():</span>
+        <span class="n">clk</span><span class="o">.</span><span class="n">next</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">clk</span>
                 
-        <span class="nd">@instance</span>
-        <span class="k">def</span> <span class="nf">output_monitor</span><span class="p">():</span>
-                <span class="k">print</span> <span class="s">&quot;t(ns)</span><span class="se">\t</span><span class="s"> output&quot;</span>
-                <span class="k">print</span> <span class="s">&quot;--------------&quot;</span>
-                <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
-                        <span class="k">yield</span> <span class="n">out</span>
-                        <span class="k">print</span> <span class="s">&quot;</span><span class="si">%d</span><span class="se">\t</span><span class="s"> </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">now</span><span class="p">(),</span> <span class="nb">bin</span><span class="p">(</span><span class="n">out</span><span class="p">))</span>
-
-        <span class="k">return</span> <span class="n">instances</span><span class="p">()</span>
+    <span class="nd">@instance</span>
+    <span class="k">def</span> <span class="nf">output_monitor</span><span class="p">():</span>
+        <span class="k">print</span> <span class="s">&quot;t(ns)</span><span class="se">\t</span><span class="s"> output&quot;</span>
+        <span class="k">print</span> <span class="s">&quot;--------------&quot;</span>
+        <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">out</span>
+            <span class="k">print</span> <span class="s">&quot;</span><span class="si">%d</span><span class="se">\t</span><span class="s"> </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">now</span><span class="p">(),</span> <span class="nb">bin</span><span class="p">(</span><span class="n">out</span><span class="p">))</span>
+            
+    <span class="k">return</span> <span class="n">instances</span><span class="p">()</span>
 
 <span class="k">def</span> <span class="nf">simulate</span><span class="p">(</span><span class="n">timesteps</span><span class="p">):</span>
-        <span class="n">tb</span> <span class="o">=</span> <span class="n">traceSignals</span><span class="p">(</span><span class="n">LFSR_testbench</span><span class="p">)</span>
-        <span class="n">sim</span> <span class="o">=</span> <span class="n">Simulation</span><span class="p">(</span><span class="n">tb</span><span class="p">)</span>
-        <span class="n">sim</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">timesteps</span><span class="p">)</span>
-        
+    <span class="n">tb</span> <span class="o">=</span> <span class="n">traceSignals</span><span class="p">(</span><span class="n">LFSR_testbench</span><span class="p">)</span>
+    <span class="n">sim</span> <span class="o">=</span> <span class="n">Simulation</span><span class="p">(</span><span class="n">tb</span><span class="p">)</span>
+    <span class="n">sim</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">timesteps</span><span class="p">)</span>
+    
 <span class="n">simulate</span><span class="p">(</span><span class="mi">300</span><span class="p">)</span>
 </pre></div>
 
@@ -1870,84 +1867,83 @@ In&nbsp;[1]:
 </div>
 <div class="inner_cell">
     <div class="input_area">
-<div class="highlight"><pre><span class="sd">&quot;&quot;&quot;                                                                                                                                                                                  </span>
-<span class="sd">        4-bit up counter. Count from 0x0 to 0xF.                                                                                                                                     </span>
-<span class="sd">                                                                                                                                                                                     </span>
-<span class="sd">        Programmed by William Harrington                                                                                                                                             </span>
-<span class="sd">        Website: wrh2.github.io                                                                                                                                                      </span>
+<div class="highlight"><pre><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    4-bit up counter. Count from 0x0 to 0xF.</span>
+<span class="sd">    </span>
+<span class="sd">    Programmed by William Harrington</span>
+<span class="sd">    Website: wrh2.github.io</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">myhdl</span> <span class="kn">import</span> <span class="o">*</span>
 
 <span class="k">def</span> <span class="nf">dff</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">nq</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">clk</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;                                                                                                                                                                          </span>
-<span class="sd">        D-Flip Flop Module                                                                                                                                                           </span>
-<span class="sd">                                                                                                                                                                                     </span>
-<span class="sd">        :param input d: input to flip flop                                                                                                                                           </span>
-<span class="sd">        :param input clk: clock signal                                                                                                                                               </span>
-<span class="sd">        :param output q: output of flip flop                                                                                                                                         </span>
-<span class="sd">        :param output nq: inverse of output                                                                                                                                          </span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="nd">@always</span><span class="p">(</span><span class="n">clk</span><span class="o">.</span><span class="n">posedge</span><span class="p">)</span>
-        <span class="k">def</span> <span class="nf">logic</span><span class="p">():</span>
-                <span class="n">q</span><span class="o">.</span><span class="n">next</span> <span class="o">=</span> <span class="n">d</span>
-                <span class="n">nq</span><span class="o">.</span><span class="n">next</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">d</span>
-        <span class="k">return</span> <span class="n">logic</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    D-Flip Flop Module</span>
+<span class="sd">    </span>
+<span class="sd">    :param input d: input to flip flop</span>
+<span class="sd">    :param input clk: clock signal</span>
+<span class="sd">    :param output q: output of flip flop</span>
+<span class="sd">    :param output nq: inverse of output</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nd">@always</span><span class="p">(</span><span class="n">clk</span><span class="o">.</span><span class="n">posedge</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">logic</span><span class="p">():</span>
+        <span class="n">q</span><span class="o">.</span><span class="n">next</span> <span class="o">=</span> <span class="n">d</span>
+        <span class="n">nq</span><span class="o">.</span><span class="n">next</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">d</span>
+    <span class="k">return</span> <span class="n">logic</span>
 
 <span class="k">def</span> <span class="nf">up_counter</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">clk</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;                                                                                                                                                                          </span>
-<span class="sd">        4-bit up counter using D-Flip Flops                                                                                                                                          </span>
-<span class="sd">                                                                                                                                                                                     </span>
-<span class="sd">        :param input clk: clock signal                                                                                                                                               </span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="sd">&quot;&quot;&quot; internal signals &quot;&quot;&quot;</span>
-        <span class="n">q0</span><span class="p">,</span> <span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">,</span> <span class="n">q3</span> <span class="o">=</span> <span class="p">[</span><span class="n">Signal</span><span class="p">(</span><span class="nb">bool</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">)]</span>
-        <span class="n">nq0</span><span class="p">,</span> <span class="n">nq1</span><span class="p">,</span> <span class="n">nq2</span><span class="p">,</span> <span class="n">nq3</span> <span class="o">=</span> <span class="p">[</span><span class="n">Signal</span><span class="p">(</span><span class="nb">bool</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">)]</span>
-        <span class="n">count</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="n">concat</span><span class="p">(</span><span class="n">q3</span><span class="p">,</span> <span class="n">q2</span><span class="p">,</span> <span class="n">q1</span><span class="p">,</span> <span class="n">q0</span><span class="p">))</span>
-
-        <span class="sd">&quot;&quot;&quot; chaining of d-flip flops &quot;&quot;&quot;</span>
-        <span class="n">d0</span> <span class="o">=</span> <span class="n">dff</span><span class="p">(</span><span class="n">q0</span><span class="p">,</span> <span class="n">nq0</span><span class="p">,</span> <span class="n">nq0</span><span class="p">,</span> <span class="n">clk</span><span class="p">)</span>
-        <span class="n">d1</span> <span class="o">=</span> <span class="n">dff</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span> <span class="n">nq1</span><span class="p">,</span> <span class="n">nq1</span><span class="p">,</span> <span class="n">nq0</span><span class="p">)</span>
-        <span class="n">d2</span> <span class="o">=</span> <span class="n">dff</span><span class="p">(</span><span class="n">q2</span><span class="p">,</span> <span class="n">nq2</span><span class="p">,</span> <span class="n">nq2</span><span class="p">,</span> <span class="n">nq1</span><span class="p">)</span>
-        <span class="n">d3</span> <span class="o">=</span> <span class="n">dff</span><span class="p">(</span><span class="n">q3</span><span class="p">,</span> <span class="n">nq3</span><span class="p">,</span> <span class="n">nq3</span><span class="p">,</span> <span class="n">nq2</span><span class="p">)</span>
-
-        <span class="sd">&quot;&quot;&quot; makes bus from output of each d-flip flop &quot;&quot;&quot;</span>
-        <span class="sd">&quot;&quot;&quot; this is just for easy viewing of the count &quot;&quot;&quot;</span>
-        <span class="nd">@always_comb</span>
-        <span class="k">def</span> <span class="nf">keep_count</span><span class="p">():</span>
-                <span class="n">count</span><span class="o">.</span><span class="n">next</span> <span class="o">=</span> <span class="n">concat</span><span class="p">(</span><span class="n">q3</span><span class="p">,</span> <span class="n">q2</span><span class="p">,</span> <span class="n">q1</span><span class="p">,</span> <span class="n">q0</span><span class="p">)</span>
-                
-        <span class="nd">@always</span><span class="p">(</span><span class="n">count</span><span class="p">)</span>
-        <span class="k">def</span> <span class="nf">output</span><span class="p">():</span>
-                <span class="n">out</span><span class="o">.</span><span class="n">next</span> <span class="o">=</span> <span class="n">count</span>
-
-        <span class="k">return</span> <span class="n">instances</span><span class="p">()</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    4-bit up counter using D-Flip Flops</span>
+<span class="sd">    </span>
+<span class="sd">    :param input clk: clock signal</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="sd">&quot;&quot;&quot; internal signals &quot;&quot;&quot;</span>
+    <span class="n">q0</span><span class="p">,</span> <span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">,</span> <span class="n">q3</span> <span class="o">=</span> <span class="p">[</span><span class="n">Signal</span><span class="p">(</span><span class="nb">bool</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">)]</span>
+    <span class="n">nq0</span><span class="p">,</span> <span class="n">nq1</span><span class="p">,</span> <span class="n">nq2</span><span class="p">,</span> <span class="n">nq3</span> <span class="o">=</span> <span class="p">[</span><span class="n">Signal</span><span class="p">(</span><span class="nb">bool</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">)]</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="n">concat</span><span class="p">(</span><span class="n">q3</span><span class="p">,</span> <span class="n">q2</span><span class="p">,</span> <span class="n">q1</span><span class="p">,</span> <span class="n">q0</span><span class="p">))</span>
+    
+    <span class="sd">&quot;&quot;&quot; chaining of d-flip flops &quot;&quot;&quot;</span>
+    <span class="n">d0</span> <span class="o">=</span> <span class="n">dff</span><span class="p">(</span><span class="n">q0</span><span class="p">,</span> <span class="n">nq0</span><span class="p">,</span> <span class="n">nq0</span><span class="p">,</span> <span class="n">clk</span><span class="p">)</span>
+    <span class="n">d1</span> <span class="o">=</span> <span class="n">dff</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span> <span class="n">nq1</span><span class="p">,</span> <span class="n">nq1</span><span class="p">,</span> <span class="n">nq0</span><span class="p">)</span>
+    <span class="n">d2</span> <span class="o">=</span> <span class="n">dff</span><span class="p">(</span><span class="n">q2</span><span class="p">,</span> <span class="n">nq2</span><span class="p">,</span> <span class="n">nq2</span><span class="p">,</span> <span class="n">nq1</span><span class="p">)</span>
+    <span class="n">d3</span> <span class="o">=</span> <span class="n">dff</span><span class="p">(</span><span class="n">q3</span><span class="p">,</span> <span class="n">nq3</span><span class="p">,</span> <span class="n">nq3</span><span class="p">,</span> <span class="n">nq2</span><span class="p">)</span>
+    
+    <span class="sd">&quot;&quot;&quot; makes bus from output of each d-flip flop &quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot; this is just for easy viewing of the count &quot;&quot;&quot;</span>
+    <span class="nd">@always_comb</span>
+    <span class="k">def</span> <span class="nf">keep_count</span><span class="p">():</span>
+        <span class="n">count</span><span class="o">.</span><span class="n">next</span> <span class="o">=</span> <span class="n">concat</span><span class="p">(</span><span class="n">q3</span><span class="p">,</span> <span class="n">q2</span><span class="p">,</span> <span class="n">q1</span><span class="p">,</span> <span class="n">q0</span><span class="p">)</span>
+    
+    <span class="nd">@always</span><span class="p">(</span><span class="n">count</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">output</span><span class="p">():</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">next</span> <span class="o">=</span> <span class="n">count</span>
+        
+    <span class="k">return</span> <span class="n">instances</span><span class="p">()</span>
         
 <span class="k">def</span> <span class="nf">up_counter_testbench</span><span class="p">():</span>
-        <span class="n">clk</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="nb">bool</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
-        <span class="n">out</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">clk</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="nb">bool</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 
-        <span class="n">up_inst</span> <span class="o">=</span> <span class="n">up_counter</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">clk</span><span class="p">)</span>
+    <span class="n">up_inst</span> <span class="o">=</span> <span class="n">up_counter</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">clk</span><span class="p">)</span>
 
-        <span class="nd">@always</span><span class="p">(</span><span class="n">delay</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
-        <span class="k">def</span> <span class="nf">clkgen</span><span class="p">():</span>
-                <span class="n">clk</span><span class="o">.</span><span class="n">next</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">clk</span>
+    <span class="nd">@always</span><span class="p">(</span><span class="n">delay</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+    <span class="k">def</span> <span class="nf">clkgen</span><span class="p">():</span>
+        <span class="n">clk</span><span class="o">.</span><span class="n">next</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">clk</span>
                 
-        <span class="nd">@instance</span>
-        <span class="k">def</span> <span class="nf">output_monitor</span><span class="p">():</span>
-                <span class="k">print</span> <span class="s">&quot;t(ns)</span><span class="se">\t</span><span class="s"> output&quot;</span>
-                <span class="k">print</span> <span class="s">&quot;--------------&quot;</span>
-                <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
-                        <span class="k">yield</span> <span class="n">clk</span><span class="o">.</span><span class="n">posedge</span>
-                        <span class="k">print</span> <span class="s">&quot;</span><span class="si">%d</span><span class="se">\t</span><span class="s"> </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">now</span><span class="p">(),</span> <span class="nb">bin</span><span class="p">(</span><span class="n">out</span><span class="p">))</span>
+    <span class="nd">@instance</span>
+    <span class="k">def</span> <span class="nf">output_monitor</span><span class="p">():</span>
+        <span class="k">print</span> <span class="s">&quot;t(ns)</span><span class="se">\t</span><span class="s"> output&quot;</span>
+        <span class="k">print</span> <span class="s">&quot;--------------&quot;</span>
+        <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+                <span class="k">yield</span> <span class="n">clk</span><span class="o">.</span><span class="n">posedge</span>
+                <span class="k">print</span> <span class="s">&quot;</span><span class="si">%d</span><span class="se">\t</span><span class="s"> </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">now</span><span class="p">(),</span> <span class="nb">bin</span><span class="p">(</span><span class="n">out</span><span class="p">))</span>
 
-        <span class="k">return</span> <span class="n">instances</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">instances</span><span class="p">()</span>
 
 <span class="k">def</span> <span class="nf">simulate</span><span class="p">(</span><span class="n">timesteps</span><span class="p">):</span>
-        <span class="n">tb</span> <span class="o">=</span> <span class="n">traceSignals</span><span class="p">(</span><span class="n">up_counter_testbench</span><span class="p">)</span>
-        <span class="n">sim</span> <span class="o">=</span> <span class="n">Simulation</span><span class="p">(</span><span class="n">tb</span><span class="p">)</span>
-        <span class="n">sim</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">timesteps</span><span class="p">)</span>
+    <span class="n">tb</span> <span class="o">=</span> <span class="n">traceSignals</span><span class="p">(</span><span class="n">up_counter_testbench</span><span class="p">)</span>
+    <span class="n">sim</span> <span class="o">=</span> <span class="n">Simulation</span><span class="p">(</span><span class="n">tb</span><span class="p">)</span>
+    <span class="n">sim</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">timesteps</span><span class="p">)</span>
         
 <span class="n">simulate</span><span class="p">(</span><span class="mi">350</span><span class="p">)</span>
 </pre></div>
@@ -2017,87 +2013,83 @@ In&nbsp;[1]:
 </div>
 <div class="inner_cell">
     <div class="input_area">
-<div class="highlight"><pre><span class="sd">&quot;&quot;&quot;                                                                                                                                                                                  </span>
-<span class="sd">        4-bit down counter. Counts down from 0xF to 0.                                                                                                                               </span>
-<span class="sd">                                                                                                                                                                                     </span>
-<span class="sd">        Programmed by William Harrington                                                                                                                                             </span>
-<span class="sd">        Website: wrh2.github.io                                                                                                                                                      </span>
+<div class="highlight"><pre><span class="sd">&quot;&quot;&quot;4-bit down counter. Counts down from 0xF to 0.</span>
+<span class="sd">Programmed by William Harrington</span>
+<span class="sd">Website: wrh2.github.io</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">myhdl</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">import</span> <span class="nn">sys</span>
 
 <span class="k">def</span> <span class="nf">dff</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">nq</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">clk</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;                                                                                                                                                                          </span>
-<span class="sd">        D-Flip Flop Module                                                                                                                                                           </span>
-<span class="sd">                                                                                                                                                                                     </span>
-<span class="sd">        :param input d: input to flip flop                                                                                                                                           </span>
-<span class="sd">        :param input clk: clock signal                                                                                                                                               </span>
-<span class="sd">        :param output q: output of flip flop                                                                                                                                         </span>
-<span class="sd">        :param output nq: inverse of output                                                                                                                                          </span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nd">@always</span><span class="p">(</span><span class="n">clk</span><span class="o">.</span><span class="n">posedge</span><span class="p">)</span>
-        <span class="k">def</span> <span class="nf">logic</span><span class="p">():</span>
-                <span class="n">q</span><span class="o">.</span><span class="n">next</span> <span class="o">=</span> <span class="n">d</span>
-                <span class="n">nq</span><span class="o">.</span><span class="n">next</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">d</span>
-        <span class="k">return</span> <span class="n">logic</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    D-Flip Flop Module</span>
+<span class="sd">    </span>
+<span class="sd">    :param input d: input to flip flop</span>
+<span class="sd">    :param input clk: clock signal</span>
+<span class="sd">    :param output q: output of flip flop</span>
+<span class="sd">    :param output nq: inverse of output</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nd">@always</span><span class="p">(</span><span class="n">clk</span><span class="o">.</span><span class="n">posedge</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">logic</span><span class="p">():</span>
+        <span class="n">q</span><span class="o">.</span><span class="n">next</span> <span class="o">=</span> <span class="n">d</span>
+        <span class="n">nq</span><span class="o">.</span><span class="n">next</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">d</span>
+    <span class="k">return</span> <span class="n">logic</span>
 
 <span class="k">def</span> <span class="nf">down_counter</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">clk</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;                                                                                                                                                                          </span>
-<span class="sd">        4-bit down counter using D-Flip Flops                                                                                                                                        </span>
-<span class="sd">                                                                                                                                                                                     </span>
-<span class="sd">        :param input clk: clock signal                                                                                                                                               </span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="sd">&quot;&quot;&quot; internal signals &quot;&quot;&quot;</span>
-        <span class="n">q0</span><span class="p">,</span> <span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">,</span> <span class="n">q3</span> <span class="o">=</span> <span class="p">[</span><span class="n">Signal</span><span class="p">(</span><span class="nb">bool</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">)]</span>
-        <span class="n">nq0</span><span class="p">,</span> <span class="n">nq1</span><span class="p">,</span> <span class="n">nq2</span><span class="p">,</span> <span class="n">nq3</span> <span class="o">=</span> <span class="p">[</span><span class="n">Signal</span><span class="p">(</span><span class="nb">bool</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">)]</span>
-        <span class="n">count</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="n">concat</span><span class="p">(</span><span class="n">q3</span><span class="p">,</span> <span class="n">q2</span><span class="p">,</span> <span class="n">q1</span><span class="p">,</span> <span class="n">q0</span><span class="p">))</span>
-
-        <span class="sd">&quot;&quot;&quot; chaining of d-flip flops &quot;&quot;&quot;</span>
-        <span class="n">d0</span> <span class="o">=</span> <span class="n">dff</span><span class="p">(</span><span class="n">q0</span><span class="p">,</span> <span class="n">nq0</span><span class="p">,</span> <span class="n">nq0</span><span class="p">,</span> <span class="n">clk</span><span class="p">)</span>
-        <span class="n">d1</span> <span class="o">=</span> <span class="n">dff</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span> <span class="n">nq1</span><span class="p">,</span> <span class="n">nq1</span><span class="p">,</span> <span class="n">q0</span><span class="p">)</span>
-        <span class="n">d2</span> <span class="o">=</span> <span class="n">dff</span><span class="p">(</span><span class="n">q2</span><span class="p">,</span> <span class="n">nq2</span><span class="p">,</span> <span class="n">nq2</span><span class="p">,</span> <span class="n">q1</span><span class="p">)</span>
-        <span class="n">d3</span> <span class="o">=</span> <span class="n">dff</span><span class="p">(</span><span class="n">q3</span><span class="p">,</span> <span class="n">nq3</span><span class="p">,</span> <span class="n">nq3</span><span class="p">,</span> <span class="n">q2</span><span class="p">)</span>
-
-        <span class="sd">&quot;&quot;&quot; makes bus from output of each d-flip flop &quot;&quot;&quot;</span>
-        <span class="sd">&quot;&quot;&quot; this is just for easy viewing of the count &quot;&quot;&quot;</span>
-        <span class="nd">@always_comb</span>
-        <span class="k">def</span> <span class="nf">keep_count</span><span class="p">():</span>
-                <span class="n">count</span><span class="o">.</span><span class="n">next</span> <span class="o">=</span> <span class="n">concat</span><span class="p">(</span><span class="n">q3</span><span class="p">,</span> <span class="n">q2</span><span class="p">,</span> <span class="n">q1</span><span class="p">,</span> <span class="n">q0</span><span class="p">)</span>
-                
-        <span class="nd">@always</span><span class="p">(</span><span class="n">count</span><span class="p">)</span>
-        <span class="k">def</span> <span class="nf">output</span><span class="p">():</span>
-                <span class="n">out</span><span class="o">.</span><span class="n">next</span> <span class="o">=</span> <span class="n">count</span>
-
-        <span class="k">return</span> <span class="n">instances</span><span class="p">()</span>
+    <span class="sd">&quot;&quot;&quot;4-bit down counter using D-Flip Flops</span>
+<span class="sd">    </span>
+<span class="sd">    :param input clk: clock signal</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="sd">&quot;&quot;&quot; internal signals &quot;&quot;&quot;</span>
+    <span class="n">q0</span><span class="p">,</span> <span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">,</span> <span class="n">q3</span> <span class="o">=</span> <span class="p">[</span><span class="n">Signal</span><span class="p">(</span><span class="nb">bool</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">)]</span>
+    <span class="n">nq0</span><span class="p">,</span> <span class="n">nq1</span><span class="p">,</span> <span class="n">nq2</span><span class="p">,</span> <span class="n">nq3</span> <span class="o">=</span> <span class="p">[</span><span class="n">Signal</span><span class="p">(</span><span class="nb">bool</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">)]</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="n">concat</span><span class="p">(</span><span class="n">q3</span><span class="p">,</span> <span class="n">q2</span><span class="p">,</span> <span class="n">q1</span><span class="p">,</span> <span class="n">q0</span><span class="p">))</span>
+    
+    <span class="sd">&quot;&quot;&quot; chaining of d-flip flops &quot;&quot;&quot;</span>
+    <span class="n">d0</span> <span class="o">=</span> <span class="n">dff</span><span class="p">(</span><span class="n">q0</span><span class="p">,</span> <span class="n">nq0</span><span class="p">,</span> <span class="n">nq0</span><span class="p">,</span> <span class="n">clk</span><span class="p">)</span>
+    <span class="n">d1</span> <span class="o">=</span> <span class="n">dff</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span> <span class="n">nq1</span><span class="p">,</span> <span class="n">nq1</span><span class="p">,</span> <span class="n">q0</span><span class="p">)</span>
+    <span class="n">d2</span> <span class="o">=</span> <span class="n">dff</span><span class="p">(</span><span class="n">q2</span><span class="p">,</span> <span class="n">nq2</span><span class="p">,</span> <span class="n">nq2</span><span class="p">,</span> <span class="n">q1</span><span class="p">)</span>
+    <span class="n">d3</span> <span class="o">=</span> <span class="n">dff</span><span class="p">(</span><span class="n">q3</span><span class="p">,</span> <span class="n">nq3</span><span class="p">,</span> <span class="n">nq3</span><span class="p">,</span> <span class="n">q2</span><span class="p">)</span>
+    
+    <span class="sd">&quot;&quot;&quot; makes bus from output of each d-flip flop &quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot; this is just for easy viewing of the count &quot;&quot;&quot;</span>
+    <span class="nd">@always_comb</span>
+    <span class="k">def</span> <span class="nf">keep_count</span><span class="p">():</span>
+        <span class="n">count</span><span class="o">.</span><span class="n">next</span> <span class="o">=</span> <span class="n">concat</span><span class="p">(</span><span class="n">q3</span><span class="p">,</span> <span class="n">q2</span><span class="p">,</span> <span class="n">q1</span><span class="p">,</span> <span class="n">q0</span><span class="p">)</span>
+    
+    <span class="nd">@always</span><span class="p">(</span><span class="n">count</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">output</span><span class="p">():</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">next</span> <span class="o">=</span> <span class="n">count</span>
+    
+    <span class="k">return</span> <span class="n">instances</span><span class="p">()</span>
     
 <span class="k">def</span> <span class="nf">down_counter_testbench</span><span class="p">():</span>
-        <span class="c"># clock signal                                                                                                                                                               </span>
-        <span class="n">clk</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="nb">bool</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
-        <span class="n">out</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="mh">0xF</span><span class="p">)</span>
-
-        <span class="c"># instantiate down counter                                                                                                                                                   </span>
-        <span class="n">down_inst</span> <span class="o">=</span> <span class="n">down_counter</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">clk</span><span class="p">)</span>
-
-        <span class="sd">&quot;&quot;&quot; clock signal generator &quot;&quot;&quot;</span>
-        <span class="nd">@always</span><span class="p">(</span><span class="n">delay</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
-        <span class="k">def</span> <span class="nf">clkgen</span><span class="p">():</span>
-                <span class="n">clk</span><span class="o">.</span><span class="n">next</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">clk</span>
+    <span class="c"># clock signal</span>
+    <span class="n">clk</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="nb">bool</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="mh">0xF</span><span class="p">)</span>
+    
+    <span class="c"># instantiate down counter</span>
+    <span class="n">down_inst</span> <span class="o">=</span> <span class="n">down_counter</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">clk</span><span class="p">)</span>
+    
+    <span class="sd">&quot;&quot;&quot; clock signal generator &quot;&quot;&quot;</span>
+    <span class="nd">@always</span><span class="p">(</span><span class="n">delay</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+    <span class="k">def</span> <span class="nf">clkgen</span><span class="p">():</span>
+        <span class="n">clk</span><span class="o">.</span><span class="n">next</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">clk</span>
                 
-        <span class="nd">@instance</span>
-        <span class="k">def</span> <span class="nf">output_monitor</span><span class="p">():</span>
-                <span class="k">print</span> <span class="s">&quot;t(ns)</span><span class="se">\t</span><span class="s"> output&quot;</span>
-                <span class="k">print</span> <span class="s">&quot;--------------&quot;</span>
-                <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
-                        <span class="k">yield</span> <span class="n">clk</span><span class="o">.</span><span class="n">posedge</span>
-                        <span class="k">print</span> <span class="s">&quot;</span><span class="si">%d</span><span class="se">\t</span><span class="s"> </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">now</span><span class="p">(),</span> <span class="nb">bin</span><span class="p">(</span><span class="n">out</span><span class="p">))</span>
+    <span class="nd">@instance</span>
+    <span class="k">def</span> <span class="nf">output_monitor</span><span class="p">():</span>
+        <span class="k">print</span> <span class="s">&quot;t(ns)</span><span class="se">\t</span><span class="s"> output&quot;</span>
+        <span class="k">print</span> <span class="s">&quot;--------------&quot;</span>
+        <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">clk</span><span class="o">.</span><span class="n">posedge</span>
+            <span class="k">print</span> <span class="s">&quot;</span><span class="si">%d</span><span class="se">\t</span><span class="s"> </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">now</span><span class="p">(),</span> <span class="nb">bin</span><span class="p">(</span><span class="n">out</span><span class="p">))</span>
 
-        <span class="k">return</span> <span class="n">instances</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">instances</span><span class="p">()</span>
 
 <span class="k">def</span> <span class="nf">simulate</span><span class="p">(</span><span class="n">timesteps</span><span class="p">):</span>
-        <span class="n">tb</span> <span class="o">=</span> <span class="n">traceSignals</span><span class="p">(</span><span class="n">down_counter_testbench</span><span class="p">)</span>
-        <span class="n">sim</span> <span class="o">=</span> <span class="n">Simulation</span><span class="p">(</span><span class="n">tb</span><span class="p">)</span>
-        <span class="n">sim</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">timesteps</span><span class="p">)</span>
+    <span class="n">tb</span> <span class="o">=</span> <span class="n">traceSignals</span><span class="p">(</span><span class="n">down_counter_testbench</span><span class="p">)</span>
+    <span class="n">sim</span> <span class="o">=</span> <span class="n">Simulation</span><span class="p">(</span><span class="n">tb</span><span class="p">)</span>
+    <span class="n">sim</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">timesteps</span><span class="p">)</span>
 
 <span class="n">simulate</span><span class="p">(</span><span class="mi">320</span><span class="p">)</span>
 </pre></div>
