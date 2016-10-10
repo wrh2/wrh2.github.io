@@ -1,6 +1,4 @@
 name: Flex
 #markdown: redcarpet
 markdown: kramdown
-highlighter: pygments
-#pygments: true
-disqus_shortname: wrh2
+highlighter: rouge
