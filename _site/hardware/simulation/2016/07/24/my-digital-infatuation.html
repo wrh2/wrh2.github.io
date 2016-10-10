@@ -217,7 +217,7 @@ The delays will be for simulating the clock to output time and setup time.
 I will use the timing parameters from our <strong>real</strong> D flip flop example for these.
 Lastly, I will make it such that the simulation will change the input to the flip flop on the rising edge of the clock.</p>
 
-<pre><code>from myhdl import *
+<div class="highlighter-rouge"><pre class="highlight"><code>from myhdl import *
 
 def dff(q, d, clk):
     """
@@ -275,9 +275,11 @@ def simulate(timesteps):
 
 simulate(500)
 </code></pre>
+</div>
 
-<pre><code>&lt;class 'myhdl._SuspendSimulation'&gt;: Simulated 500 timesteps
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;class 'myhdl._SuspendSimulation'&gt;: Simulated 500 timesteps
 </code></pre>
+</div>
 
 <h4 id="results">Results</h4>
 
@@ -320,7 +322,7 @@ When a 1 is placed on the input of this device, it will take 4 clock periods for
 
 <p><img src="../../../../../images/sr_ex.jpg" alt="Serial In, Serial Out Shift Register" /></p>
 
-<pre><code>from myhdl import *
+<div class="highlighter-rouge"><pre class="highlight"><code>from myhdl import *
 
 def dff(q, d, clk):
     """
@@ -378,9 +380,11 @@ def simulate(timesteps):
 
 simulate(500)
 </code></pre>
+</div>
 
-<pre><code>&lt;class 'myhdl._SuspendSimulation'&gt;: Simulated 500 timesteps
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;class 'myhdl._SuspendSimulation'&gt;: Simulated 500 timesteps
 </code></pre>
+</div>
 
 <h4 id="results-1">Results</h4>
 
@@ -403,7 +407,7 @@ Here’s a really neat ipython notebook on the subject from one of the gentlmen 
 
 <p>Below is an example of the implementation depicted in MyHDL.</p>
 
-<pre><code>"""
+<div class="highlighter-rouge"><pre class="highlight"><code>"""
     4-bit Fibonaccio Linear Feedback Shift Register
     programmed using MyHDL library
     
@@ -506,8 +510,9 @@ def simulate(timesteps):
     
 simulate(300)
 </code></pre>
+</div>
 
-<pre><code>t(ns)	 output
+<div class="highlighter-rouge"><pre class="highlight"><code>t(ns)	 output
 --------------
 10	 111
 30	 11
@@ -528,6 +533,7 @@ simulate(300)
 
 &lt;class 'myhdl._SuspendSimulation'&gt;: Simulated 300 timesteps
 </code></pre>
+</div>
 
 <h2 id="asynchronous-circuits">Asynchronous Circuits</h2>
 
@@ -536,7 +542,7 @@ The examples below are <a href="https://en.wikipedia.org/wiki/Asynchronous_circu
 
 <h3 id="bit-asynchronous-up-counter">4-bit Asynchronous Up Counter</h3>
 
-<pre><code>"""
+<div class="highlighter-rouge"><pre class="highlight"><code>"""
     4-bit up counter. Count from 0x0 to 0xF.
     
     Programmed by William Harrington
@@ -616,8 +622,9 @@ def simulate(timesteps):
         
 simulate(350)
 </code></pre>
+</div>
 
-<pre><code>t(ns)	 output
+<div class="highlighter-rouge"><pre class="highlight"><code>t(ns)	 output
 --------------
 10	 0
 30	 0
@@ -641,10 +648,11 @@ simulate(350)
 
 &lt;class 'myhdl._SuspendSimulation'&gt;: Simulated 350 timesteps
 </code></pre>
+</div>
 
 <h3 id="bit-asynchronous-down-counter">4-bit Asynchronous Down Counter</h3>
 
-<pre><code>"""
+<div class="highlighter-rouge"><pre class="highlight"><code>"""
     4-bit down counter. Counts down from 0xF to 0x0.
     
     Programmed by William Harrington
@@ -726,8 +734,9 @@ def simulate(timesteps):
 
 simulate(320)
 </code></pre>
+</div>
 
-<pre><code>t(ns)	 output
+<div class="highlighter-rouge"><pre class="highlight"><code>t(ns)	 output
 --------------
 10	 1111
 30	 1110
@@ -749,6 +758,7 @@ simulate(320)
 
 &lt;class 'myhdl._SuspendSimulation'&gt;: Simulated 320 timesteps
 </code></pre>
+</div>
 
 <h2 id="references">References</h2>
 
