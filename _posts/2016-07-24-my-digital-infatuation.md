@@ -26,7 +26,7 @@ A Mealy machine's output depends on its current state and inputs.
 
 Another point of contrast between these two types of circuits is their timing.
 
-#### Combinational timing
+### Combinational timing
 
 The output of a combinational circuit will change based on its inputs.
 This change takes place after some time $$t_{pd}$$ which is the [propagation delay](https://en.wikipedia.org/wiki/Propagation_delay#Electronics) of the circuit.
@@ -41,7 +41,7 @@ Now these assumptions are not true for EVERY 1-bit full adder.
 One could implement this circuit with logic gates that have different delays which would make $$t_{pd}$$ different.
 The one thing that is never different is the fact that you will always have to wait for the signal that takes the most time to travel through your circuit.
 
-##### A real example
+#### A real example
 
 Let's take a look at a datasheet for a **real** 4-bit full adder here: http://www.ti.com/lit/ds/symlink/cd74hc283.pdf.
 The table for propagation delays begins at the bottom of page 3.
@@ -54,7 +54,7 @@ We already know that $$A_{0}, B_{0}$$ to $$S_{0}$$ at 4.5V has a max propagation
 But what about the $$C_{in}$$ to $$S_{0}$$? According to the datasheet, it is 32ns for HC types and 31ns for HCT types.
 Since $$A_{0}, B_{0}$$ to $$S_{0}$$ $$>$$ $$C_{in}$$ to $$S_{0}$$ in both cases, the longest path is $$A_{0}, B_{0}$$ to $$S_{0}$$ so $$t_{pd}$$ would be the time it takes for our signal to travel that path.
 
-#### Sequential timing
+### Sequential timing
 
 The state of a sequential circuit always changes with a [clock pulse](https://en.wikipedia.org/wiki/Clock_signal) called ***the clock***.
 The clock simply outputs a signal that turns "On" then "Off" over and over.
@@ -68,7 +68,7 @@ These represent the amount of time you should hold an input prior to a clock edg
 
 ![A clock pulse with a period of 20ns (50 MHz)](../../../../../images/clock.png)
 
-##### A real example
+#### A real example
 
 Let's take a look at the timing parameters for for a **real** D type flip flop (i'll talk more about this later) here: http://www.ti.com/lit/ds/symlink/cd74hc74.pdf.
 Timing parameters that we should care about start at the bottom of page 4.
@@ -78,7 +78,7 @@ If you look closely, you can see that the HC types offer a range of voltages for
 The setup time and hold time for both types are the same at 4.5V (12ns and 3ns respectively).
 Their clock to output time is also the same at 4.5V (max of 35ns).
 
-### The Flip Flop
+## The Flip Flop
 
 The most basic element of a sequential circuit is always a flip flop.
 There are a few different types of flip flops: T, JK, and D.
@@ -86,7 +86,7 @@ The most used of these is easily the D Flip Flop.
 One look at the flip flops available from [Digi-Key](http://digi-key.com) -- the fourth largest electronic component distributor in North America -- confirms this fact. At the time of me writing this article, there were 2,372 different types of flip flops available. 2,219 were D flip flops, 152 were JK flip flops, and sadly only 1 was a T flip flop. See for yourself here: http://www.digikey.com/short/341mvp.
 Needless to say, I will not be wasting time on discussing JK or T flip flops in detail.
 
-#### D Flip Flops
+### D Flip Flops
 
 The D flip flop takes the input applied to it on some clock edge and makes it the next output.
 The T flip flop only changes its output when the input is high, and the JK flip flop (which has two inputs J,K) changes based on specific encodings of the inputs (for instance, J=1 and K=0 will make the output 1 while J=0 and K=1 will reset the flip flop). The simplicity of the D flip flop is probably what makes it the most used type of flip flop.
@@ -110,7 +110,7 @@ I will use the timing parameters from our **real** D flip flop example for these
 Lastly, I will make it such that the simulation will change the input to the flip flop on the rising edge of the clock.
 
 
-{% highlight python linenos %}
+```
 from myhdl import *
 
 def dff(q, d, clk):
@@ -168,12 +168,12 @@ def simulate(timesteps):
     sim.run(timesteps)
 
 simulate(500)
-{% endhighlight %}
+```
 
     <class 'myhdl._SuspendSimulation'>: Simulated 500 timesteps
 
 
-##### Results
+#### Results
 
 <img src="../../../../../images/dff_out.png" alt="Waveform output of D Flip Flop simulation" style="width: 750px;"/>
 
@@ -278,7 +278,7 @@ simulate(500)
     <class 'myhdl._SuspendSimulation'>: Simulated 500 timesteps
 
 
-##### Results
+#### Results
 
 <img src="../../../../../images/sr_out.png" alt="Waveform output of shift register simulation" style="width: 750px;"/>
 
@@ -286,11 +286,11 @@ As expected, the simulation shows that it takes 4 clock cycles for a bit to prop
 
 <img src="../../../../../images/sr_out2.png" alt="Waveform output of shift register simulation" style="width: 750px;"/>
 
-### More advanced examples
+## More advanced examples
 
 This section contains some more advanced examples that I have laid the foundation for but will leave largely unexplained.
 
-#### Linear Feedback Shift Registers (LFSR)
+### Linear Feedback Shift Registers (LFSR)
 
 A linear feedback shift register are a particular type of shift register that is commonly used for generating random numbers.
 Here's a really neat ipython notebook on the subject from one of the gentlmen at XESS Corp: https://github.com/xesscorp/CAT-Board/blob/master/tests/RNG_with_MyHDL.ipynb.
@@ -427,13 +427,12 @@ simulate(300)
     <class 'myhdl._SuspendSimulation'>: Simulated 300 timesteps
 
 
-#### Asynchronous Circuits
+## Asynchronous Circuits
 
 The circuits so far have all been synchronous which means that they use the same clock signal.
 The examples below are [asycnrhonous](https://en.wikipedia.org/wiki/Asynchronous_circuit) counters.
 
-##### 4-bit Asynchronous Up Counter
-
+### 4-bit Asynchronous Up Counter
 
 ```
 """
@@ -542,8 +541,7 @@ simulate(350)
     <class 'myhdl._SuspendSimulation'>: Simulated 350 timesteps
 
 
-##### 4-bit Asynchronous Down Counter
-
+### 4-bit Asynchronous Down Counter
 
 ```
 """

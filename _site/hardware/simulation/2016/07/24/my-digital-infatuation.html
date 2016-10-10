@@ -31,6 +31,15 @@
             
             
               <li class="post-link">
+                <a class="post-title" href="/hardware/simulation/2016/10/09/jekyll.html">
+                  <span class="post-date">09 Oct 2016</span>
+                  Started using Jekyll
+                </a>
+              </li>
+            
+            
+            
+              <li class="post-link">
                 <a class="post-title" href="/hardware/simulation/2016/07/24/my-digital-infatuation.html">
                   <span class="post-date">24 Jul 2016</span>
                   My Digital Infatuation
@@ -104,7 +113,7 @@ A Mealy machine’s output depends on its current state and inputs.</p>
 
 <p>Another point of contrast between these two types of circuits is their timing.</p>
 
-<h4 id="combinational-timing">Combinational timing</h4>
+<h3 id="combinational-timing">Combinational timing</h3>
 
 <p>The output of a combinational circuit will change based on its inputs.
 This change takes place after some time <script type="math/tex">t_{pd}</script> which is the <a href="https://en.wikipedia.org/wiki/Propagation_delay#Electronics">propagation delay</a> of the circuit.
@@ -119,7 +128,7 @@ Now these assumptions are not true for EVERY 1-bit full adder.
 One could implement this circuit with logic gates that have different delays which would make <script type="math/tex">t_{pd}</script> different.
 The one thing that is never different is the fact that you will always have to wait for the signal that takes the most time to travel through your circuit.</p>
 
-<h5 id="a-real-example">A real example</h5>
+<h4 id="a-real-example">A real example</h4>
 
 <p>Let’s take a look at a datasheet for a <strong>real</strong> 4-bit full adder here: http://www.ti.com/lit/ds/symlink/cd74hc283.pdf.
 The table for propagation delays begins at the bottom of page 3.
@@ -132,7 +141,7 @@ We already know that <script type="math/tex">A_{0}, B_{0}</script> to <script ty
 But what about the <script type="math/tex">C_{in}</script> to <script type="math/tex">S_{0}</script>? According to the datasheet, it is 32ns for HC types and 31ns for HCT types.
 Since <script type="math/tex">A_{0}, B_{0}</script> to <script type="math/tex">S_{0}</script> <script type="math/tex">></script> <script type="math/tex">C_{in}</script> to <script type="math/tex">S_{0}</script> in both cases, the longest path is <script type="math/tex">A_{0}, B_{0}</script> to <script type="math/tex">S_{0}</script> so <script type="math/tex">t_{pd}</script> would be the time it takes for our signal to travel that path.</p>
 
-<h4 id="sequential-timing">Sequential timing</h4>
+<h3 id="sequential-timing">Sequential timing</h3>
 
 <p>The state of a sequential circuit always changes with a <a href="https://en.wikipedia.org/wiki/Clock_signal">clock pulse</a> called <strong><em>the clock</em></strong>.
 The clock simply outputs a signal that turns “On” then “Off” over and over.
@@ -146,7 +155,7 @@ These represent the amount of time you should hold an input prior to a clock edg
 
 <p><img src="../../../../../images/clock.png" alt="A clock pulse with a period of 20ns (50 MHz)" /></p>
 
-<h5 id="a-real-example-1">A real example</h5>
+<h4 id="a-real-example-1">A real example</h4>
 
 <p>Let’s take a look at the timing parameters for for a <strong>real</strong> D type flip flop (i’ll talk more about this later) here: http://www.ti.com/lit/ds/symlink/cd74hc74.pdf.
 Timing parameters that we should care about start at the bottom of page 4.
@@ -156,7 +165,7 @@ If you look closely, you can see that the HC types offer a range of voltages for
 The setup time and hold time for both types are the same at 4.5V (12ns and 3ns respectively).
 Their clock to output time is also the same at 4.5V (max of 35ns).</p>
 
-<h3 id="the-flip-flop">The Flip Flop</h3>
+<h2 id="the-flip-flop">The Flip Flop</h2>
 
 <p>The most basic element of a sequential circuit is always a flip flop.
 There are a few different types of flip flops: T, JK, and D.
@@ -164,7 +173,7 @@ The most used of these is easily the D Flip Flop.
 One look at the flip flops available from <a href="http://digi-key.com">Digi-Key</a> – the fourth largest electronic component distributor in North America – confirms this fact. At the time of me writing this article, there were 2,372 different types of flip flops available. 2,219 were D flip flops, 152 were JK flip flops, and sadly only 1 was a T flip flop. See for yourself here: http://www.digikey.com/short/341mvp.
 Needless to say, I will not be wasting time on discussing JK or T flip flops in detail.</p>
 
-<h4 id="d-flip-flops">D Flip Flops</h4>
+<h3 id="d-flip-flops">D Flip Flops</h3>
 
 <p>The D flip flop takes the input applied to it on some clock edge and makes it the next output.
 The T flip flop only changes its output when the input is high, and the JK flip flop (which has two inputs J,K) changes based on specific encodings of the inputs (for instance, J=1 and K=0 will make the output 1 while J=0 and K=1 will reset the flip flop). The simplicity of the D flip flop is probably what makes it the most used type of flip flop.</p>
@@ -208,68 +217,69 @@ The delays will be for simulating the clock to output time and setup time.
 I will use the timing parameters from our <strong>real</strong> D flip flop example for these.
 Lastly, I will make it such that the simulation will change the input to the flip flop on the rising edge of the clock.</p>
 
-<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="lineno"> 1</span> <span class="kn">from</span> <span class="nn">myhdl</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="lineno"> 2</span> 
-<span class="lineno"> 3</span> <span class="k">def</span> <span class="nf">dff</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">clk</span><span class="p">):</span>
-<span class="lineno"> 4</span>     <span class="sd">&quot;&quot;&quot;</span>
-<span class="lineno"> 5</span> <span class="sd">    Postive edge triggered D-Flip Flop Module</span>
-<span class="lineno"> 6</span> <span class="sd">    </span>
-<span class="lineno"> 7</span> <span class="sd">    :param input d: input to flip flop</span>
-<span class="lineno"> 8</span> <span class="sd">    :param input clk: clock signal</span>
-<span class="lineno"> 9</span> <span class="sd">    :param output q: output of flip flop</span>
-<span class="lineno">10</span> <span class="sd">    &quot;&quot;&quot;</span>
-<span class="lineno">11</span>     <span class="nd">@always</span><span class="p">(</span><span class="n">clk</span><span class="o">.</span><span class="n">posedge</span><span class="p">)</span>
-<span class="lineno">12</span>     <span class="k">def</span> <span class="nf">logic</span><span class="p">():</span>
-<span class="lineno">13</span>         <span class="c"># changes to d on the rising edge</span>
-<span class="lineno">14</span>         <span class="n">q</span><span class="o">.</span><span class="n">next</span> <span class="o">=</span> <span class="n">d</span>
-<span class="lineno">15</span>     <span class="k">return</span> <span class="n">logic</span>
-<span class="lineno">16</span> 
-<span class="lineno">17</span> <span class="k">def</span> <span class="nf">dff_testbench</span><span class="p">():</span>
-<span class="lineno">18</span>     <span class="sd">&quot;&quot;&quot;</span>
-<span class="lineno">19</span> <span class="sd">    Testbench for D flip flop</span>
-<span class="lineno">20</span> <span class="sd">    &quot;&quot;&quot;</span>
-<span class="lineno">21</span>     
-<span class="lineno">22</span>     <span class="sd">&quot;&quot;&quot; declare signals &quot;&quot;&quot;</span>
-<span class="lineno">23</span>     
-<span class="lineno">24</span>     <span class="c"># clock signal</span>
-<span class="lineno">25</span>     <span class="n">clk</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="nb">bool</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
-<span class="lineno">26</span>     
-<span class="lineno">27</span>     <span class="c"># d flip flop input and output with delays</span>
-<span class="lineno">28</span>     <span class="n">d</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="nb">bool</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">delay</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
-<span class="lineno">29</span>     <span class="n">q</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="nb">bool</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">delay</span><span class="o">=</span><span class="mi">35</span><span class="p">)</span>
-<span class="lineno">30</span> 
-<span class="lineno">31</span>     <span class="c"># d flip flop input and output with no delays</span>
-<span class="lineno">32</span>     <span class="n">d_nd</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="nb">bool</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
-<span class="lineno">33</span>     <span class="n">q_nd</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="nb">bool</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
-<span class="lineno">34</span>     
-<span class="lineno">35</span>     <span class="c"># instantiate D flip flop with delays</span>
-<span class="lineno">36</span>     <span class="n">dff_delay_inst</span> <span class="o">=</span> <span class="n">dff</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">clk</span><span class="p">)</span>
-<span class="lineno">37</span>     <span class="n">dff_nodelay_inst</span> <span class="o">=</span> <span class="n">dff</span><span class="p">(</span><span class="n">q_nd</span><span class="p">,</span> <span class="n">d_nd</span><span class="p">,</span> <span class="n">clk</span><span class="p">)</span>
-<span class="lineno">38</span>     
-<span class="lineno">39</span>     <span class="nd">@always</span><span class="p">(</span><span class="n">delay</span><span class="p">(</span><span class="mi">50</span><span class="p">))</span>
-<span class="lineno">40</span>     <span class="k">def</span> <span class="nf">clkgen</span><span class="p">():</span>
-<span class="lineno">41</span>         <span class="sd">&quot;&quot;&quot; clock generator &quot;&quot;&quot;</span>
-<span class="lineno">42</span>         <span class="n">clk</span><span class="o">.</span><span class="n">next</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">clk</span>
-<span class="lineno">43</span>         
-<span class="lineno">44</span>     <span class="nd">@always</span><span class="p">(</span><span class="n">clk</span><span class="o">.</span><span class="n">posedge</span><span class="p">)</span>
-<span class="lineno">45</span>     <span class="k">def</span> <span class="nf">stimulus</span><span class="p">():</span>
-<span class="lineno">46</span>         <span class="sd">&quot;&quot;&quot; change input &quot;&quot;&quot;</span>
-<span class="lineno">47</span>         <span class="n">d</span><span class="o">.</span><span class="n">next</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">d</span>
-<span class="lineno">48</span>         <span class="n">d_nd</span><span class="o">.</span><span class="n">next</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">d_nd</span>
-<span class="lineno">49</span>             
-<span class="lineno">50</span>     <span class="k">return</span> <span class="n">instances</span><span class="p">()</span>
-<span class="lineno">51</span> 
-<span class="lineno">52</span> <span class="k">def</span> <span class="nf">simulate</span><span class="p">(</span><span class="n">timesteps</span><span class="p">):</span>
-<span class="lineno">53</span>     <span class="n">tb</span> <span class="o">=</span> <span class="n">traceSignals</span><span class="p">(</span><span class="n">dff_testbench</span><span class="p">)</span>
-<span class="lineno">54</span>     <span class="n">sim</span> <span class="o">=</span> <span class="n">Simulation</span><span class="p">(</span><span class="n">tb</span><span class="p">)</span>
-<span class="lineno">55</span>     <span class="n">sim</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">timesteps</span><span class="p">)</span>
-<span class="lineno">56</span> 
-<span class="lineno">57</span> <span class="n">simulate</span><span class="p">(</span><span class="mi">500</span><span class="p">)</span></code></pre></figure>
+<pre><code>from myhdl import *
+
+def dff(q, d, clk):
+    """
+    Postive edge triggered D-Flip Flop Module
+    
+    :param input d: input to flip flop
+    :param input clk: clock signal
+    :param output q: output of flip flop
+    """
+    @always(clk.posedge)
+    def logic():
+        # changes to d on the rising edge
+        q.next = d
+    return logic
+
+def dff_testbench():
+    """
+    Testbench for D flip flop
+    """
+    
+    """ declare signals """
+    
+    # clock signal
+    clk = Signal(bool(0))
+    
+    # d flip flop input and output with delays
+    d = Signal(bool(0), delay=12)
+    q = Signal(bool(0), delay=35)
+
+    # d flip flop input and output with no delays
+    d_nd = Signal(bool(0))
+    q_nd = Signal(bool(0))
+    
+    # instantiate D flip flop with delays
+    dff_delay_inst = dff(q, d, clk)
+    dff_nodelay_inst = dff(q_nd, d_nd, clk)
+    
+    @always(delay(50))
+    def clkgen():
+        """ clock generator """
+        clk.next = not clk
+        
+    @always(clk.posedge)
+    def stimulus():
+        """ change input """
+        d.next = not d
+        d_nd.next = not d_nd
+            
+    return instances()
+
+def simulate(timesteps):
+    tb = traceSignals(dff_testbench)
+    sim = Simulation(tb)
+    sim.run(timesteps)
+
+simulate(500)
+</code></pre>
 
 <pre><code>&lt;class 'myhdl._SuspendSimulation'&gt;: Simulated 500 timesteps
 </code></pre>
 
-<h5 id="results">Results</h5>
+<h4 id="results">Results</h4>
 
 <p><img src="../../../../../images/dff_out.png" alt="Waveform output of D Flip Flop simulation" style="width: 750px;" /></p>
 
@@ -372,7 +382,7 @@ simulate(500)
 <pre><code>&lt;class 'myhdl._SuspendSimulation'&gt;: Simulated 500 timesteps
 </code></pre>
 
-<h5 id="results-1">Results</h5>
+<h4 id="results-1">Results</h4>
 
 <p><img src="../../../../../images/sr_out.png" alt="Waveform output of shift register simulation" style="width: 750px;" /></p>
 
@@ -380,11 +390,11 @@ simulate(500)
 
 <p><img src="../../../../../images/sr_out2.png" alt="Waveform output of shift register simulation" style="width: 750px;" /></p>
 
-<h3 id="more-advanced-examples">More advanced examples</h3>
+<h2 id="more-advanced-examples">More advanced examples</h2>
 
 <p>This section contains some more advanced examples that I have laid the foundation for but will leave largely unexplained.</p>
 
-<h4 id="linear-feedback-shift-registers-lfsr">Linear Feedback Shift Registers (LFSR)</h4>
+<h3 id="linear-feedback-shift-registers-lfsr">Linear Feedback Shift Registers (LFSR)</h3>
 
 <p>A linear feedback shift register are a particular type of shift register that is commonly used for generating random numbers.
 Here’s a really neat ipython notebook on the subject from one of the gentlmen at XESS Corp: https://github.com/xesscorp/CAT-Board/blob/master/tests/RNG_with_MyHDL.ipynb.</p>
@@ -519,12 +529,12 @@ simulate(300)
 &lt;class 'myhdl._SuspendSimulation'&gt;: Simulated 300 timesteps
 </code></pre>
 
-<h4 id="asynchronous-circuits">Asynchronous Circuits</h4>
+<h2 id="asynchronous-circuits">Asynchronous Circuits</h2>
 
 <p>The circuits so far have all been synchronous which means that they use the same clock signal.
 The examples below are <a href="https://en.wikipedia.org/wiki/Asynchronous_circuit">asycnrhonous</a> counters.</p>
 
-<h5 id="bit-asynchronous-up-counter">4-bit Asynchronous Up Counter</h5>
+<h3 id="bit-asynchronous-up-counter">4-bit Asynchronous Up Counter</h3>
 
 <pre><code>"""
     4-bit up counter. Count from 0x0 to 0xF.
@@ -632,7 +642,7 @@ simulate(350)
 &lt;class 'myhdl._SuspendSimulation'&gt;: Simulated 350 timesteps
 </code></pre>
 
-<h5 id="bit-asynchronous-down-counter">4-bit Asynchronous Down Counter</h5>
+<h3 id="bit-asynchronous-down-counter">4-bit Asynchronous Down Counter</h3>
 
 <pre><code>"""
     4-bit down counter. Counts down from 0xF to 0x0.
