@@ -3,6 +3,7 @@ layout: default
 title: Home
 ---
 
-{% assign page = site.posts.first %}
+<!-- {% assign page = site.posts.first %}-->
+{% assign page = site.categories['About'].first %}
 {% assign content = page.content %}
 {% include post.html %}

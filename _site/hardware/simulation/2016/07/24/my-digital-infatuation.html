@@ -24,10 +24,25 @@
       <div class="sidebar" id="sidebar">
         <div class="header">
           <h1 class="title"><a href="/"><img id="logo" src="/images/profile_picture.png"></a></h1>
-          <span class="tagline">Talk about the metal</span>
+          <span class="tagline">Bare Metal 0xaf</span>
         </div>
         <div class="posts">
           <ul class="posts-list">
+            
+            
+            
+            
+              <li class="post-link">
+                <a class="post-title" href="/embedded/systems/2021/05/15/my-embedded-must-haves-at-home.html">
+                  <span class="post-date">15 May 2021</span>
+                  My Embedded must haves at home
+                </a>
+              </li>
+            
+            
+            
+            
+            
             
             
               <li class="post-link">
@@ -65,15 +80,14 @@
               </li>
             
             
-            
-            
           </ul>
         </div>
         <div class="footer">
           <span id="footer-links">
-            <a href="/about/2016/02/17/about.html" class="footer-link">About</a> <span class="separator">&bull;</span>
-            <a href="https://twitter.com/pdxwrh2" class="footer-link">Twitter</a> <span class="separator">&bull;</span>
-            <a href="https://github.com/wrh2" class="footer-link">GitHub</a>
+            <a href="/about/2022/05/16/about.html" class="footer-link">About</a> <span class="separator">&bull;</span>
+            <!--<a href="https://twitter.com/pdxwrh2" class="footer-link">Twitter</a> <span class="separator">&bull;</span>-->
+            <a href="https://github.com/wrh2" class="footer-link">GitHub</a> <span class="separator">&bull;</span>
+            <a href="https://www.linkedin.com/in/will-h-b2682319b" class="footer-link">LinkedIn</a>
           </span>
         </div>
       </div>
@@ -88,7 +102,7 @@
     </div>
     <div id="info-container">
       <h1 id="title">My Digital Infatuation</h1>
-      <span id="date">24 Jul 2016</span>
+      <!--<span id="date">24 Jul 2016</span>-->
     </div>
   </div>
 
@@ -116,16 +130,16 @@ A Mealy machine’s output depends on its current state and inputs.</p>
 <h3 id="combinational-timing">Combinational timing</h3>
 
 <p>The output of a combinational circuit will change based on its inputs.
-This change takes place after some time <script type="math/tex">t_{pd}</script> which is the <a href="https://en.wikipedia.org/wiki/Propagation_delay#Electronics">propagation delay</a> of the circuit.
+This change takes place after some time \(t_{pd}\) which is the <a href="https://en.wikipedia.org/wiki/Propagation_delay#Electronics">propagation delay</a> of the circuit.
 The propagation delay of the signal is the longest path in terms of time that a signal must take.
 This time will depend on how long it takes for each gate in the path to change its output once its input has changed.
 For example, let us revisit the wikipedia article on the 1-bit full adder here: https://en.wikipedia.org/wiki/Adder_(electronics). Here they assume that the XOR gates both take 3 delays to change their output,
-which means it will take 2*3 delays before the sum bit <script type="math/tex">S</script> will change once any of the inputs <script type="math/tex">A, B, C_{in}</script> change.
+which means it will take 2*3 delays before the sum bit \(S\) will change once any of the inputs \(A, B, C_{in}\) change.
 For the sake of simplicity and clarity, let us further assume these delays are of 1 nanosecond (ns).
-The other output of the circuit <script type="math/tex">C_{out}</script> (the carry-out bit) only takes 2 delays according to this article.
-What this means is that <script type="math/tex">C_{out}</script> will change quicker than <script type="math/tex">S</script> and that the inputs must be held on the circuit long enough for <script type="math/tex">S</script> to change. With that said, it should come as no surprise that <script type="math/tex">t_{pd}</script> of this circuit would be 6ns.
+The other output of the circuit \(C_{out}\) (the carry-out bit) only takes 2 delays according to this article.
+What this means is that \(C_{out}\) will change quicker than \(S\) and that the inputs must be held on the circuit long enough for \(S\) to change. With that said, it should come as no surprise that \(t_{pd}\) of this circuit would be 6ns.
 Now these assumptions are not true for EVERY 1-bit full adder.
-One could implement this circuit with logic gates that have different delays which would make <script type="math/tex">t_{pd}</script> different.
+One could implement this circuit with logic gates that have different delays which would make \(t_{pd}\) different.
 The one thing that is never different is the fact that you will always have to wait for the signal that takes the most time to travel through your circuit.</p>
 
 <h4 id="a-real-example">A real example</h4>
@@ -134,19 +148,19 @@ The one thing that is never different is the fact that you will always have to w
 The table for propagation delays begins at the bottom of page 3.
 You can see that the propagation delays are broken up into two categories: HC types and HCT types.
 These categories represent two different chips which obviously have two different implementations judging by the propagation delays.
-The path for 1-bit addition is listed as <script type="math/tex">A_{n}, B_{n}</script> to <script type="math/tex">S_{n}</script>, which at 4.5V is 42ns HC types and 49ns for HCT types.
+The path for 1-bit addition is listed as \(A_{n}, B_{n}\) to \(S_{n}\), which at 4.5V is 42ns HC types and 49ns for HCT types.
 Now we need to worry about the carry bit.
 Let’s assume we were using just bit 0.
-We already know that <script type="math/tex">A_{0}, B_{0}</script> to <script type="math/tex">S_{0}</script> at 4.5V has a max propagation delay of 42ns HC types and 49ns for HCT types.
-But what about the <script type="math/tex">C_{in}</script> to <script type="math/tex">S_{0}</script>? According to the datasheet, it is 32ns for HC types and 31ns for HCT types.
-Since <script type="math/tex">A_{0}, B_{0}</script> to <script type="math/tex">S_{0}</script> <script type="math/tex">></script> <script type="math/tex">C_{in}</script> to <script type="math/tex">S_{0}</script> in both cases, the longest path is <script type="math/tex">A_{0}, B_{0}</script> to <script type="math/tex">S_{0}</script> so <script type="math/tex">t_{pd}</script> would be the time it takes for our signal to travel that path.</p>
+We already know that \(A_{0}, B_{0}\) to \(S_{0}\) at 4.5V has a max propagation delay of 42ns HC types and 49ns for HCT types.
+But what about the \(C_{in}\) to \(S_{0}\)? According to the datasheet, it is 32ns for HC types and 31ns for HCT types.
+Since \(A_{0}, B_{0}\) to \(S_{0}\) \(&gt;\) \(C_{in}\) to \(S_{0}\) in both cases, the longest path is \(A_{0}, B_{0}\) to \(S_{0}\) so \(t_{pd}\) would be the time it takes for our signal to travel that path.</p>
 
 <h3 id="sequential-timing">Sequential timing</h3>
 
 <p>The state of a sequential circuit always changes with a <a href="https://en.wikipedia.org/wiki/Clock_signal">clock pulse</a> called <strong><em>the clock</em></strong>.
 The clock simply outputs a signal that turns “On” then “Off” over and over.
 The amount of time that it remains on and then off is determined by its <a href="https://en.wikipedia.org/wiki/Frequency">period</a>.
-The figure below shows a clock that has a frequency of 50 MHz (period = <script type="math/tex">\frac{1}{50*10^6} = 20ns</script>).
+The figure below shows a clock that has a frequency of 50 MHz (period = \(\frac{1}{50*10^6} = 20ns\)).
 The change of state for a sequential circuit can occur on the positive (rising) or negative (falling) edge of the clock.
 There is still propagation delay present in sequential circuits but it manifests itself in a different way.
 Instead of worrying about the longest path of your input signal, you must worry about the time it takes for the output to change once an input has been applied and the clock edge has occurred. This is called the clock to output time.
@@ -178,15 +192,15 @@ Needless to say, I will not be wasting time on discussing JK or T flip flops in 
 <p>The D flip flop takes the input applied to it on some clock edge and makes it the next output.
 The T flip flop only changes its output when the input is high, and the JK flip flop (which has two inputs J,K) changes based on specific encodings of the inputs (for instance, J=1 and K=0 will make the output 1 while J=0 and K=1 will reset the flip flop). The simplicity of the D flip flop is probably what makes it the most used type of flip flop.</p>
 
-<p>The input of a D flip flop is usually called <script type="math/tex">D</script> and the output is usually called <script type="math/tex">Q</script>.
+<p>The input of a D flip flop is usually called \(D\) and the output is usually called \(Q\).
 The truth table for a D flip flop is:</p>
 
 <table>
   <thead>
     <tr>
-      <th><script type="math/tex">Clock</script></th>
-      <th><script type="math/tex">D</script></th>
-      <th><script type="math/tex">Q_{next}</script></th>
+      <th>\(Clock\)</th>
+      <th>\(D\)</th>
+      <th>\(Q_{next}\)</th>
     </tr>
   </thead>
   <tbody>
@@ -208,7 +222,7 @@ The truth table for a D flip flop is:</p>
   </tbody>
 </table>
 
-<p>As I said earlier, the edge of the clock is irrelevant because it can happen on the rising or the falling edge and it doesn’t change the truth table. Notice that the last entry in the truth table tells us that <script type="math/tex">Q</script> doesn’t change when there is no clock edge.</p>
+<p>As I said earlier, the edge of the clock is irrelevant because it can happen on the rising or the falling edge and it doesn’t change the truth table. Notice that the last entry in the truth table tells us that \(Q\) doesn’t change when there is no clock edge.</p>
 
 <p>Below is an example of how to implement and simulate a positive edge triggered D flip flop with MyHDL.
 In this example I will declare two sets of signals:
@@ -217,7 +231,7 @@ The delays will be for simulating the clock to output time and setup time.
 I will use the timing parameters from our <strong>real</strong> D flip flop example for these.
 Lastly, I will make it such that the simulation will change the input to the flip flop on the rising edge of the clock.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>from myhdl import *
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from myhdl import *
 
 def dff(q, d, clk):
     """
@@ -274,21 +288,19 @@ def simulate(timesteps):
     sim.run(timesteps)
 
 simulate(500)
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>&lt;class 'myhdl._SuspendSimulation'&gt;: Simulated 500 timesteps
-</code></pre>
-</div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;class 'myhdl._SuspendSimulation'&gt;: Simulated 500 timesteps
+</code></pre></div></div>
 
 <h4 id="results">Results</h4>
 
 <p><img src="../../../../../images/dff_out.png" alt="Waveform output of D Flip Flop simulation" style="width: 750px;" /></p>
 
 <p>Notice that the delays are actually neglible and don’t impact the outcome of the simulation.
-That is to say, when <script type="math/tex">D</script> goes high on the first rising clock edge,
-<script type="math/tex">Q</script> stays low until the next rising clock edge where it then changes
-because <script type="math/tex">D</script> is high and this happens regardless of the delay.
+That is to say, when \(D\) goes high on the first rising clock edge,
+\(Q\) stays low until the next rising clock edge where it then changes
+because \(D\) is high and this happens regardless of the delay.
 Therefore, my simulations will not have delays on the
 D flip flop inputs and outputs going forward.</p>
 
@@ -307,7 +319,7 @@ This is where I believe people can get confused and/or lost.
 Combinational and sequential circuitry represents the lowest level of <a href="https://en.wikipedia.org/wiki/Hardware_description_language">Hardware Description Languages</a>.
 Combinational and sequential circuits are used to build modules that can then be used to then build other modules and so on.
 This structure represents the concept of a hierarchy but I like to think about it like a <a href="https://en.wikipedia.org/wiki/Matryoshka_doll">Matryoshka_doll</a>.
-In MyHDL, “hierarchy can be modeled by defining the instances in a higher-level function, and returning them. This pattern can be repeated for an arbitrary number of hierarchical levels”<script type="math/tex">^{[1]}</script>.
+In MyHDL, “hierarchy can be modeled by defining the instances in a higher-level function, and returning them. This pattern can be repeated for an arbitrary number of hierarchical levels”\(^{[1]}\).
 This was done previously in the D flip flop example but now I will add another level to it in the example below.</p>
 
 <h3 id="shift-register">Shift Register</h3>
@@ -322,7 +334,7 @@ When a 1 is placed on the input of this device, it will take 4 clock periods for
 
 <p><img src="../../../../../images/sr_ex.jpg" alt="Serial In, Serial Out Shift Register" /></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>from myhdl import *
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from myhdl import *
 
 def dff(q, d, clk):
     """
@@ -379,12 +391,10 @@ def simulate(timesteps):
     sim.run(timesteps)
 
 simulate(500)
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>&lt;class 'myhdl._SuspendSimulation'&gt;: Simulated 500 timesteps
-</code></pre>
-</div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;class 'myhdl._SuspendSimulation'&gt;: Simulated 500 timesteps
+</code></pre></div></div>
 
 <h4 id="results-1">Results</h4>
 
@@ -407,7 +417,7 @@ Here’s a really neat ipython notebook on the subject from one of the gentlmen 
 
 <p>Below is an example of the implementation depicted in MyHDL.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>"""
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"""
     4-bit Fibonaccio Linear Feedback Shift Register
     programmed using MyHDL library
     
@@ -509,10 +519,9 @@ def simulate(timesteps):
     sim.run(timesteps)
     
 simulate(300)
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>t(ns)	 output
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>t(ns)	 output
 --------------
 10	 111
 30	 11
@@ -532,17 +541,16 @@ simulate(300)
 
 
 &lt;class 'myhdl._SuspendSimulation'&gt;: Simulated 300 timesteps
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h2 id="asynchronous-circuits">Asynchronous Circuits</h2>
 
 <p>The circuits so far have all been synchronous which means that they use the same clock signal.
 The examples below are <a href="https://en.wikipedia.org/wiki/Asynchronous_circuit">asycnrhonous</a> counters.</p>
 
-<h3 id="bit-asynchronous-up-counter">4-bit Asynchronous Up Counter</h3>
+<h3 id="4-bit-asynchronous-up-counter">4-bit Asynchronous Up Counter</h3>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>"""
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"""
     4-bit up counter. Count from 0x0 to 0xF.
     
     Programmed by William Harrington
@@ -621,10 +629,9 @@ def simulate(timesteps):
     sim.run(timesteps)
         
 simulate(350)
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>t(ns)	 output
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>t(ns)	 output
 --------------
 10	 0
 30	 0
@@ -647,12 +654,11 @@ simulate(350)
 
 
 &lt;class 'myhdl._SuspendSimulation'&gt;: Simulated 350 timesteps
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<h3 id="bit-asynchronous-down-counter">4-bit Asynchronous Down Counter</h3>
+<h3 id="4-bit-asynchronous-down-counter">4-bit Asynchronous Down Counter</h3>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>"""
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"""
     4-bit down counter. Counts down from 0xF to 0x0.
     
     Programmed by William Harrington
@@ -733,10 +739,9 @@ def simulate(timesteps):
     sim.run(timesteps)
 
 simulate(320)
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>t(ns)	 output
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>t(ns)	 output
 --------------
 10	 1111
 30	 1110
@@ -757,8 +762,7 @@ simulate(320)
 
 
 &lt;class 'myhdl._SuspendSimulation'&gt;: Simulated 320 timesteps
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h2 id="references">References</h2>
 
@@ -771,10 +775,10 @@ simulate(320)
   </div>
   <div class="colophon">
     <p>
-      <span id="pub-date">Published on 24 Jul 2016</span> <span class="separator">&bull;</span>
-      <span id="social">Find me on <a href="https://twitter.com/pdxwrh2">Twitter</a>!</span>
+      <span id="pub-date">Published on 24 Jul 2016</span> <!--<span class="separator">&bull;</span>-->
+      <!--<span id="social">Find me on <a href="https://twitter.com/pdxwrh2">LinkedIn</a>!</span>-->
     </p>
-<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript" ></script>
   </div>
 </div>
 

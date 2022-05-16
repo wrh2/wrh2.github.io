@@ -27,7 +27,7 @@ First off, it is pathetic that this is stopping the FBI. If you're a computer or
 
 ### Passcodes
 
-From my experience, the passcode on any iOS device consists of 4 integers that range from 0 to 9. If you know some basic mathematics, its easy to see that this means there are $10^{4}$ or 10,000 combinations. The FBI would like to be able to try every possible combination until the actual passcode is found without having to worry about erasing the data on it. This is called a [brute force attack](https://en.wikipedia.org/wiki/Brute-force_attack).
+From my experience, the passcode on any iOS device consists of 4 integers that range from 0 to 9. If you know some basic mathematics, its easy to see that this means there are $$10^{4}$$ or 10,000 combinations. The FBI would like to be able to try every possible combination until the actual passcode is found without having to worry about erasing the data on it. This is called a [brute force attack](https://en.wikipedia.org/wiki/Brute-force_attack).
 
 ### Electronic entry
 

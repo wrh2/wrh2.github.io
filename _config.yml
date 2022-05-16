@@ -1,4 +1,3 @@
 name: Flex
-#markdown: redcarpet
 markdown: kramdown
 highlighter: rouge
