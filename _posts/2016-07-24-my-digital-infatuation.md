@@ -3,7 +3,7 @@ layout: post
 title:  "My Digital Infatuation"
 date:   2016-07-24 23:47:00
 categories: Hardware Simulation
-visible: 1
+visible: 0
 ---
 
 ## Introduction

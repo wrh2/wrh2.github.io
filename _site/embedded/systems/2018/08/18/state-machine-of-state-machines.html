@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+      <title>bare metal af - A State Machine Of State Machines</title>
+      <meta name="viewport" content="width=device-width">
+
+      <!-- syntax highlighting CSS -->
+      <link rel="stylesheet" href="/css/syntax.css">
+
+      <!-- Custom CSS -->
+      <link rel="stylesheet" href="/css/main.css">
+
+      <!-- Responsive CSS -->
+      <link rel="stylesheet" href="/css/responsive.css">
+
+      <!-- Google Fonts -->
+      <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700' rel='stylesheet' type='text/css'>
+      <link href='http://fonts.googleapis.com/css?family=Raleway:300,400,700' rel='stylesheet' type='text/css'>
+  </head>
+  <body>
+    <div class="site">
+      <div class="sidebar" id="sidebar">
+        <div class="header">
+          <h1 class="title"><a href="/"><img id="logo" src="/images/profile_picture.png"></a></h1>
+          <span class="tagline">Bare Metal 0xaf</span>
+        </div>
+        <div class="posts">
+          <ul class="posts-list">
+            
+            
+            
+            
+              <li class="post-link">
+                <a class="post-title" href="/embedded/systems/2022/05/15/my-embedded-must-haves-at-home.html">
+                  <span class="post-date">15 May 2022</span>
+                  My Embedded must haves at home
+                </a>
+              </li>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </ul>
+        </div>
+        <div class="footer">
+          <span id="footer-links">
+            <a href="/about/2022/05/16/about.html" class="footer-link">About</a> <span class="separator">&bull;</span>
+            <!--<a href="https://twitter.com/pdxwrh2" class="footer-link">Twitter</a> <span class="separator">&bull;</span>-->
+            <a href="https://github.com/wrh2" class="footer-link">GitHub</a> <span class="separator">&bull;</span>
+            <a href="https://www.linkedin.com/in/will-h-b2682319b" class="footer-link">LinkedIn</a>
+          </span>
+        </div>
+      </div>
+
+        <div class="content" id="home">
+  <div id="sidebar-button">
+    <img src="/images/sidebar-button.png">
+  </div>
+  <div id="post-info">
+    <div id="cover-photo-container">
+      <img id="cover-photo" src="">
+    </div>
+    <div id="info-container">
+      <h1 id="title">A State Machine Of State Machines</h1>
+      <!--<span id="date">18 Aug 2018</span>-->
+    </div>
+  </div>
+
+  <div class="post">
+    <h1 id="introduction">Introduction</h1>
+
+<p>In this post I want to cover an approach to firmware development. Firmware is just a term for software that runs hardware. It is the unsung hero of every electronic device.
+As much fun as it would be to just plop down a bunch of hardware on a printed circuit board and just have it all work,
+this is not the reality of electronics development. In fact, that wouldn’t even be practical. The reason being is you would need to create hardware that operates in a
+way that meets the need of EVERY application. And that’s not realistic at all, which is why a thing like abstraction exists.
+So what you end up having to do is write software that runs the hardware in a way that meets the needs of your application.
+Now firmware is often times developed for electronics that operate in a specific way. For example, the remote control for your TV is
+programmed to control things on your TV screen when you press buttons on it. This is referred to as an embedded system.
+The hardware inside of the remote control is specifically designed for the application of a TV remote. The people who pieced that hardware together had to write software 
+that runs it in such a way that it performs the functions of a TV remote.</p>
+
+<p>The electronics inside such devices operate in environments that often times have pretty rigid contraints. For instance, that TV remote of yours can operate on some AA or AAA batteries for months, maybe even a year, before you have to worry about changing them. This is an example of low power consumption and this is often times imposed on
+designers of embedded systems. Because seriously, who wants to worry about a power source for their TV remote every time they want to use it? Exactly. Nobody.
+Furthermore, think about the kind of processing needed for a TV remote. You press a button, something on the TV happens. Pretty simple, right? Not nearly as complicated as
+say the processing needed for taking input from a keyboard and displaying it on a screen as with your laptop or PC.</p>
+
+<p>What you end up getting in a lot of embedded system designs is a microcontroller that interfaces with miscellaneous pieces of hardware to control the electrical and mechanical aspects of the system. This tiny little integrated circuit that contains a CPU and a bunch of peripherals that
+you can program to meet the needs of your application. Now, there are a lot of ways that you can do that. It is very common for a multi-threaded real-time operating system (RTOS) to be used such as ChibiOS. And this is nice because it guarantees timing unlike the operating system on your laptop or PC where threads and processes are at the mercy of
+the operating system scheduler. Harkening back to the TV remote example, when we press buttons on it we’ll want to see something happen on the TV within a certain amount 
+of time. For instance, no one is going to wait 60 seconds for the channel on the TV to change. Now in a TV remote, the timing requirements are probably far more relaxed 
+than say an embedded system on an aircraft or spacecraft where they’ll need to react quickly to changes in input caused by the environment surrounding the craft. 
+Another thing that’s nice about this is that each thread will be serviced for a specific amount of time (based on its priority) and this will guarantee that no thread 
+impedes the throughput of the system.</p>
+
+<p>The approach I want to talk about uses a single thread and some state machines. This is referred to as an <a href="https://en.wikipedia.org/wiki/Event-driven_finite-state_machine">event-driven finite-state machine</a>.</p>
+
+<h1 id="designing-a-state-machine-of-state-machines">Designing a state machine of state machines</h1>
+
+<h2 id="while1">while(1)</h2>
+
+<p>Every C program starts here.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>int main(void){
+    while(1){
+        //stuff happens here
+    }
+    return 0; //should never get here
+}
+</code></pre></div></div>
+
+<p>The entire contents of your C program for the embedded system will transpire in the infinite while loop.
+You could just put all of your code right there and call it good as long as it does what you need it to in the amount of time you need it to, but you’re probably
+better off at least organizing it a little bit.</p>
+
+<h2 id="hardware-tasks">Hardware tasks</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>void hardwareTasks(void){
+    i2cTasks();
+    spiTasks();
+    uartTasks();
+    //whatever other tasks you want to do here
+}
+</code></pre></div></div>
+
+<p>Each one of these will be a state machine</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>typedef enum{
+    I2C_STATE0,
+    I2C_STATE1,
+//..I2C_STATEn,
+}i2c_states_t;
+
+typedef struct{
+    i2c_states_t state;
+    i2c_states_t last_state; //not necessary but nice for debugging
+}i2c_driver_t;
+
+i2c_driver_t i2c_driver = {0};
+
+void i2cTasks(void)
+{
+    switch(i2c_driver.state)
+    {
+        case I2C_STATE0:
+        {
+            if(some_bit_is_set)
+            {
+                i2c_driver.last_state = i2c_driver.state;
+                i2c_driver.state = I2C_STATE1;
+            }
+        }
+        case I2C_STATE1:
+        {
+            if(something_else_that_causes_state_transition)
+            {
+                i2c_driver.last_state = i2c_driver.state;
+                i2c_driver.state = I2C_STATE2;
+            }  
+            break;
+        }
+        /*
+        case I2C_STATEn:
+        {
+            //so on and so on
+            break;
+        }
+        */
+        default:
+        {
+            //whoops
+            break;
+        }  
+    }
+}
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#include &lt;stdint.h&gt;
+
+typedef enum{
+    STATE0,
+    STATE1,
+    STATE2,
+//...STATEn
+}my_states_t;
+</code></pre></div></div>
+
+<h2 id="other-ways-to-do-it">Other ways to do it</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#include &lt;stdio.h&gt;
+
+struct fsm;
+typedef void state_fn(struct fsm *);
+
+struct fsm{
+    state_fn * next;
+    int i; //data
+};
+
+state_fn foo, bar;
+
+void foo(struct fsm * state){
+    printf("%s %i\n", __func__, ++state-&gt;i);
+    state-&gt;next = bar;
+}
+
+void bar(struct fsm * state){
+    printf("%s %i\n", __func__, ++state-&gt;i);
+    state-&gt;next = state-&gt;i &lt; 10 ? foo : 0;
+}
+
+int main(void){
+    struct fsm state = {foo, 0};
+    while(state.next) state.next(&amp;state);
+    return 0;
+}
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/*
+ * Example of implementing FSM with function pointers as opposed to switch case statements
+ * Programmed by William Harrington
+ * Adapted from this stackoverflow answer: https://stackoverflow.com/a/1383453
+ */
+
+#include &lt;stdio.h&gt;
+
+/* this will be used to define the structure for each state */
+/* but we need to define it after we define the template */
+/* for the function pointer */
+struct state;
+
+/* template for our function pointers */
+typedef void stateFunction(struct state *);
+
+typedef struct state{
+
+    /* pointer to the last state function called */
+    stateFunction * last;
+
+    /* pointer to the next state function */
+    stateFunction * next;
+
+    /* data that we use for determining state transitions */
+    int i;
+
+}state;
+
+/* these are our "states" */
+stateFunction idle, begin, wait, finish;
+
+/* idle state */
+void idle(state * ptr){
+
+    /* prints out the name of the function we are currently in */
+    printf("%s\n", __func__);
+
+    /* keep track of last state */
+    ptr-&gt;last = idle;
+
+    /* transition to begin state */
+    if(ptr-&gt;i == 1) ptr-&gt;next = begin;
+
+    /* this will make our main function return */
+    else if(ptr-&gt;i == 10) ptr-&gt;next = 0;
+
+    /* stay in idle state */
+    else ptr-&gt;next = idle;
+
+}
+
+/* begin state */
+void begin(state * ptr){
+
+    /* prints out the name of the function we are currently in */
+    printf("%s\n", __func__);
+
+    /* state transition */
+    ptr-&gt;last = begin;
+    ptr-&gt;next = wait;
+
+}
+
+void wait(state * ptr){
+
+    /* prints out the name of the function we are currently in */
+    printf("%s\n", __func__);
+
+    /* state transition */
+    ptr-&gt;last = wait;
+    ptr-&gt;next = finish;
+
+}
+
+void finish(state * ptr){
+
+    /* prints out the name of the function we are currently in */
+    printf("%s\n", __func__);
+
+    /* state transition */
+    ptr-&gt;last = finish;
+    ptr-&gt;next = idle;
+
+    /* this will cause the program to end */
+    ptr-&gt;i = 10;
+
+}
+
+int main(void){
+
+    /* initialize FSM */
+    state fsm = {idle, idle, 1};
+
+    /* will execute until fsm.i == 10, then fsm.next will become NULL and the while loop will terminate than main will return */
+    while(fsm.next) fsm.next(&amp;fsm);
+
+    return 0;
+
+}
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#include &lt;stdio.h&gt;
+
+/* states */
+typedef enum{
+    IDLE,
+    BEGIN,
+    WAIT,
+    FINISH,
+    END,
+}state_t;
+
+/* structure for fsm object */
+typedef struct{
+    state_t state;
+    void (*func)(void);
+}fsm_t;
+
+/* prototypes for state functions */
+void idleState(void);
+void beginState(void);
+void waitState(void);
+void finishState(void);
+
+/* lookup table for state machine */
+fsm_t lut[] = 
+{ 
+    {IDLE, idleState},
+    {BEGIN, beginState},
+    {WAIT, waitState},
+    {FINISH, finishState},
+    {END, 0} //this state will cause our while loop in main to break
+};
+
+/* controls where you go in the lookup table */
+state_t current_state = IDLE;
+
+void idleState(void){
+    printf("%s\n", __func__);
+    current_state = BEGIN;
+}
+
+void beginState(void){
+    printf("%s\n", __func__);
+    current_state = WAIT;
+}
+
+void waitState(void){
+    printf("%s\n", __func__);
+    current_state = FINISH;
+}
+
+void finishState(void){
+    printf("%s\n", __func__);
+    current_state = END;
+}
+
+int main(void){
+
+    while(lut[current_state].func) (*lut[current_state].func)();
+
+    return 0;
+
+}
+</code></pre></div></div>
+
+  </div>
+  <div class="colophon">
+    <p>
+      <span id="pub-date">Published on 18 Aug 2018</span> <!--<span class="separator">&bull;</span>-->
+      <!--<span id="social">Find me on <a href="https://twitter.com/pdxwrh2">LinkedIn</a>!</span>-->
+    </p>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript" ></script>
+  </div>
+</div>
+
+
+
+    </div>
+    <script src="/scripts/responsive.js" type="text/javascript"></script>
+  </body>
+</html>
